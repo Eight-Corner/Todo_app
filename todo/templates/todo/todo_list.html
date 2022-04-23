@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue-Django ToDo App</title>
+
+    <style>
+        body {
+            text-align: center;
+            background-color: #ddd;
+        }
+
+        .todoList {
+            list-style: none;
+            padding: 10px 0;
+            text-align: left;
+        }
+
+        .todoList li {
+            display: flex;
+            height: 50px;
+            line-height: 50px;
+            margin: 0.5rem 0;
+            padding: 0 0.9rem;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .removeBtn {
+            margin-left: auto;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div id='app'>
+
+    <h1>My Todo App !</h1>
+    <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
+    <br>
+
+    <ul class="todoList">
+        {#        v-for문 대신에, 장고에서 제공하는 템플릿 태그로 바꾼다. #}
+        {% for todo in object_list %}
+            <li>
+                <span>{{ todo.name }}::: {{ todo.todo }}</span>
+                <span class="removeBtn"><a href="{% url 'todo:delete' todo.id %}">&#x00D7</a></span>
+            </li>
+        {% endfor %}
+    </ul>
+
+</div>
+</body>
+</html>
