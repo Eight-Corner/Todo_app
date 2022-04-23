@@ -1,25 +1,81 @@
-{% load staticfiles %}
+{#{% load staticfiles %}#}
+{% load static %}
 {# Django 3.x 부터는 {% load static %} 으로 변경한다. #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{% block title %}home.html{% endblock %}</title>
+    {# block 태그의 이름을 title로 정한다.#}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
     {#    장고의 static 템플릿 태그를 사용하기 위해서 로드를 시켜준다.#}
 
+    {% block extra-style %}{% endblock %}
+    {# 하위 html 파일에서 추가로 스타일을 지정할 수 있기 때문에 extra-style 블럭을 지정했다. #}
 </head>
-<body>
+<body style="padding-top: 90px;">
 
+
+<!-- Main Menu -->
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top">
+
+    <span class="navbar-brand mx-5 mb-0 font-weight-bold font-italic">Vue-Django System</span>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item mx-1 btn btn-primary">
+                <a class="nav-link text-white" href="{% url 'home' %}">Home</a></li>
+            <li class="nav-item mx-1 btn btn-primary">
+                <a class="nav-link text-white" href="{% url 'todo:vonly' %}">VueOnly</a></li>
+            <li class="nav-item mx-1 btn btn-primary">
+                <a class="nav-link text-white" href="{% url 'todo:create' %}">DjangoOnly</a></li>
+
+            <li class="nav-item dropdown mx-1 btn btn-primary">
+                <a class="nav-link dropdown-toggle text-white" href="#" data-toggle="dropdown">Util</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'admin:index' %}">Admin</a>
+                    <div class="dropdown-divider"></div>
+                </div>
+            </li>
+        </ul>
+
+        <form class="form-inline my-2">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search">
+        </form>
+
+        <ul class="navbar-nav ml-5 mr-5">
+            <li class="nav-item dropdown mx-1 btn btn-primary">
+                <a class="nav-link dropdown-toggle text-white" href="#" data-toggle="dropdown">
+                    <i class="fas fa-user"></i>&nbsp; Anonymous &nbsp;</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'home' %}">Login</a>
+                    <a class="dropdown-item" href="{% url 'home' %}">Register</a>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+
+<div class="container">
+    {#    본문이 들어갈 자리를 content block으로 지정한다.#}
+    {% block content %}{% endblock %}
+</div>
+
+{# 푸터 블럭 지정 #}
+{% block footer %}{% endblock %}
 <!-- Bootstrap core JavaScript -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+{% block extra-script %}{% endblock %}
 
 </body>
-
-
 </html>

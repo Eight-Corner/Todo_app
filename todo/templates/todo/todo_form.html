@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue-Django ToDo App</title>
-
+{% extends 'base.html' %}
+{% block title %}
+    todo_form.html
+{% endblock %}
+{% block extra-style %}
     <style>
         body {
             text-align: center;
@@ -23,8 +21,9 @@
         .inputBox .name {
             border-style: none;
             border-bottom: 1px solid #ddd;
-            width: 70px;
+            width: 90px;
             padding-left: 20px;
+            line-height: 20px;
         }
 
         .inputBox .item {
@@ -33,12 +32,7 @@
             width: 400px;
             margin-left: 50px;
             padding-left: 20px;
-        }
-
-        .todoList {
-            list-style: none;
-            padding: 10px 0;
-            text-align: left;
+            line-height: 20px;
         }
 
         .todoList li {
@@ -50,39 +44,26 @@
             background: white;
             border-radius: 5px;
         }
-        .addBtn {
-            cursor: pointer;
-            background-color: #cc8800;
-            color: #ffffFF;
-            border-radius: 15px;
-            border-color: #445566;
-        }
-        .removeBtn {
-            margin-left: auto;
-            font-size: 20px;
-            cursor: pointer;
-        }
+
     </style>
-</head>
+{% endblock %}
 
-<body>
-<div id='app'>
+{% block content %}
+    <div id='app'>
 
-    <h1>My Todo App !</h1>
-    <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
-    <br>
-
-
-{#    csrf 토큰 공격을 방지하는 csrf 토큰을 넣는다. 장고에서 제공해주는 템플릿 태그이다. #}
-    <form class="inputBox" action="." method="post"> {% csrf_token  %}
-        <input class="name" type="text" placeholder="name ..." name="name">
-        <input class="item" type="text" placeholder="type anything welcomed ..."
-               name="todo">
-        <button class="addBtn" type="submit">ADD</button>
-    </form>
+        <h1>My Todo App !</h1>
+        <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
+        <br>
 
 
-</div>
+        {#    csrf 토큰 공격을 방지하는 csrf 토큰을 넣는다. 장고에서 제공해주는 템플릿 태그이다. #}
+        <form class="inputBox" action="." method="post"> {% csrf_token %}
+            <input class="name" type="text" placeholder="name ..." name="name">
+            <input class="item" type="text" placeholder="type anything welcomed ..."
+                   name="todo">
+            <button class="btn btn-info btn-sm" type="submit">ADD</button>
+        </form>
 
-</body>
-</html>
+
+    </div>
+{% endblock %}
