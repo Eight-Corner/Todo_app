@@ -10,6 +10,7 @@
             text-align: center;
             background-color: #ddd;
         }
+
         .inputBox {
             margin: auto;
             width: 70%;
@@ -18,12 +19,14 @@
             border-radius: 50px;
             line-height: 50px;
         }
+
         .inputBox .name {
             border-style: none;
             border-bottom: 1px solid #ddd;
             width: 70px;
             padding-left: 20px;
         }
+
         .inputBox .item {
             border-style: none;
             border-bottom: 1px solid #ddd;
@@ -31,11 +34,13 @@
             margin-left: 50px;
             padding-left: 20px;
         }
+
         .todoList {
             list-style: none;
             padding: 10px 0;
             text-align: left;
         }
+
         .todoList li {
             display: flex;
             height: 50px;
@@ -45,61 +50,85 @@
             background: white;
             border-radius: 5px;
         }
+        .addBtn {
+            cursor: pointer;
+            background-color: #cc8800;
+            color: #ffffFF;
+            border-radius: 15px;
+            border-color: #445566;
+        }
         .removeBtn {
             margin-left: auto;
             font-size: 20px;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
-    <div id='app'>
+<div id='app'>
 
-        <h1>My Todo App !</h1>
-        <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
-        <br>
+    <h1>My Todo App !</h1>
+    <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
+    <br>
 
-        <div class="inputBox">
-            <input class="name" type="text" placeholder="name ..." v-model="name">
-            <input class="item" type="text" placeholder="type anything welcomed ..." v-model="newTodoItem">
-            <button v-on:click="add_todo()">ADD</button>
-        </div>
 
-        <ul class="todoList">
-            <li v-for="(todo, index) in todoItems">
-                <span>{ todo.name }:: { todo.item }</span>
-                <span class="removeBtn" @click="remove_todo(index)">&#x00D7</span>
-            </li>
-        </ul>
-
+    <div class="inputBox">
+        <input class="name" type="text" placeholder="name ..." v-model.trim="name">
+        <input class="item" type="text" placeholder="type anything welcomed ..."
+               v-model.trim="newTodoItem" @keyup.enter="add_todo">
+        <button class="addBtn" @click="add_todo">ADD</button>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script>
-        let vm = new Vue({
-            delimiters: ['{', '}'], // 중괄호를 하나만 사용하겠다는 문법 수정
-            el: '#app',
-            data: {
-                name: '',
-                newTodoItem: '',
-                todoItems:[],
-            },
-            methods: {
-                add_todo: function() {
-                    console.log("add_todo()...");
-                    if (this.name === '') {
-                        this.name = '홍길동';
-                    }
-                    if (this.newTodoItem === '') {
-                        return;
-                    }
-                    this.todoItems.push({name: this.name, item: this.newTodoItem});
-                    this.name = '';
-                    this.newTodoItem = '';
+    <ul class="todoList">
+        <li v-for="(todoItem, index) in todoItems">
+            <span>{todoItem.name}::: {todoItem.item}</span>
+            <span class="removeBtn" @click.stop="remove_todo(todoItem, index)">&#x00D7</span>
+        </li>
+    </ul>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    let vm = new Vue({
+        delimiters: ['{', '}'], // 중괄호를 하나만 사용하겠다는 문법 수정
+        el: '#app',
+        data: {
+            name: '',
+            newTodoItem: '',
+            todoItems: [
+                {name: '김석훈', item: 'Django 와 Vue.js 연동 프로그램을 만들고 있습니다.'},
+                {name: '홍길동', item: '이름을 안쓰면 홍길동으로 나와요...'},
+                {name: '이순신', item: '신에게는 아직 열두 척의 배가 있사옵니다.'},
+                {name: '성춘향', item: '그네 타기'},
+            ],
+        },
+        methods: {
+            add_todo: function () {
+                console.log("add_todo()...");
+                if (this.name === '') {
+                    this.name = '홍길동';
                 }
+                if (this.newTodoItem === '') {
+                    return;
+                }
+                this.todoItems.push({name: this.name, item: this.newTodoItem});
+                this.name = '';
+                this.newTodoItem = '';
             },
-        })
-    </script>
+            remove_todo: function (todoItem, index) {
+                console.log(todoItem);
+                this.todoItems.splice(index, 1);    /* from index, count */
+                // axios delete
+            },
+            clear_input: function () {
+                this.name = '';
+                this.newTodoItem = '';
+            },
+        },
+    })
+</script>
 
 </body>
 </html>

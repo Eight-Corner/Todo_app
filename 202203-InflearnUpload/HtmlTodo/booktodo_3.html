@@ -70,7 +70,7 @@
     
         <ul class="todoList">
             <li v-for="(todoItem, index) in todoItems">
-                <span>{{todoItem.name}}::: {{todoItem.item}}</span>
+                <span>{todoItem.name}::: {todoItem.item}</span>
                 <span class="removeBtn" v-on:click.stop="remove_todo(todoItem, index)">&#x00D7</span>
             </li>
         </ul>
@@ -80,16 +80,12 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
         var vm = new Vue({
+            delimiters: ['{', '}'], // 중괄호를 하나만 사용하겠다는 문법 수정
             el: '#app',
             data: {
                 name: '',
                 newTodoItem: '',
-                todoItems: [
-                    {name: '김석훈', item: 'Django 와 Vue.js 연동 프로그램을 만들고 있습니다.'},
-                    {name: '홍길동', item: '이름을 안쓰면 홍길동으로 나와요...'},
-                    {name: '이순신', item: '신에게는 아직 열두 척의 배가 있사옵니다.'},
-                    {name: '성춘향', item: '그네 타기'},
-                ],
+                todoItems:[],
             },
             methods: {
                 add_todo: function() {
