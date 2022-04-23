@@ -64,35 +64,38 @@
             <input class="item" type="text" placeholder="type anything welcomed ..." v-model="newTodoItem">
             <button v-on:click="add_todo()">ADD</button>
         </div>
-    
+
         <ul class="todoList">
             <li v-for="(todo, index) in todoItems">
                 <span>{ todo.name }:: { todo.item }</span>
-                <span class="removeBtn">&#x00D7</span>
+                <span class="removeBtn" @click="remove_todo(index)">&#x00D7</span>
             </li>
         </ul>
 
     </div>
 
-    <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
-        var vm = new Vue({
+        let vm = new Vue({
             delimiters: ['{', '}'], // 중괄호를 하나만 사용하겠다는 문법 수정
             el: '#app',
             data: {
                 name: '',
                 newTodoItem: '',
-                todoItems:[
-                    {name: '김석훈', item: 'Django 와 Vue.js 연동 프로그램을 만들고 있습니다.'},
-                    {name: '홍길동', item: '이름을 안쓰면 홍길동으로 나와요...'},
-                    {name: '이순신', item: '신에게는 아직 열두 척의 배가 있사옵니다.'},
-                    {name: '성춘향', item: '그네 타기'},                    
-                ],
+                todoItems:[],
             },
             methods: {
                 add_todo: function() {
                     console.log("add_todo()...");
+                    if (this.name === '') {
+                        this.name = '홍길동';
+                    }
+                    if (this.newTodoItem === '') {
+                        return;
+                    }
                     this.todoItems.push({name: this.name, item: this.newTodoItem});
+                    this.name = '';
+                    this.newTodoItem = '';
                 }
             },
         })
