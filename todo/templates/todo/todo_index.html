@@ -53,8 +53,6 @@
         .removeBtn {
             font-size: 20px;
             cursor: pointer;
-            height: 30px;
-            line-height: 0;
             margin: auto 0 auto auto;
         }
         .removeBtn:hover {
@@ -71,14 +69,15 @@
         <br>
 
         <div>
-            <input class="name" type="text" placeholder="name ..." v-model="name">
-            <input class="item" type="text" placeholder="type anything welcomed ..." v-model="todo" @keyup.enter="add_todo()">
+            <input class="name" type="text" placeholder="name ..." v-model.trim="name">
+<!--            v-model에 .trim 이라는 수식어를 사용하면 앞뒤 공백을 삭제해서 삽입한다. -->
+            <input class="item" type="text" placeholder="type anything welcomed ..." v-model.trim="todo" @keyup.enter="add_todo()">
             <button class="btn btn-primary btn-sm" @click="add_todo()">ADD</button>
         </div>
 
         <ul class="todoList">
-            <li v-for="(todo, index) in todoItems">
-                <span>[ todo.name ] :: [ todo.item ] </span>
+            <li v-for="(todo, index) in todoList">
+                <span>{ todo.name } :: { todo.todo }</span>
                 <span class="removeBtn" @click="remove_todo(index)">&#x00D7</span>
             </li>
         </ul>
@@ -86,19 +85,19 @@
     </div>
 {% endblock %}
 {% block extra-script %}
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script>
-        let vm = new Vue({
-            delimiters: ['[[', ']]'],
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+let vm = new Vue({
+            delimiters: ['{', '}'],
             el: '#app',
             data: {
                 name: '',
                 todo: '',
                 todoList: [
-                    {name: '테스트1', item: '테스트 내용 1'},
-                    {name: '테스트2', item: '테스트 내용 2'},
-                    {name: '테스트3', item: '테스트 내용 3'},
-                    {name: '테스트4', item: '테스트 내용 4'},
+                    {name: '테스트1', todo: '테스트 내용 1'},
+                    {name: '테스트4', todo: '테스트 내용 4'},
+                    {name: '테스트2', todo: '테스트 내용 2'},
+                    {name: '테스트3', todo: '테스트 내용 3'},
                 ],
             },
             methods: {
@@ -116,8 +115,6 @@
                 remove_todo: function (index) {
                     console.log(index);
                     this.todoList.splice(index, 1);
-                },
-                clear_input: function () {
                 },
             },
         })
