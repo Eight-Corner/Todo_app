@@ -2,121 +2,141 @@
 {% block title %}Vue.js - Django todo app{% endblock %}
 
 {% block extra-style %}
-    <style>
-        body {
-            text-align: center;
-            background-color: #ddd;
-        }
+<style>
+    body {
+        text-align: center;
+        background-color: #ddd;
+    }
 
-        .inputBox {
-            margin: auto;
-            width: 70%;
-            background: white;
-            height: 50px;
-            border-radius: 50px;
-            line-height: 50px;
-        }
+    .inputBox {
+        margin: auto;
+        width: 70%;
+        background: white;
+        height: 50px;
+        border-radius: 50px;
+        line-height: 50px;
+    }
 
-        .inputBox .name {
-            border-style: none;
-            border-bottom: 1px solid #ddd;
-            width: 90px;
-            padding-left: 20px;
-            line-height: 20px;
-        }
+    .inputBox .name {
+        border-style: none;
+        border-bottom: 1px solid #ddd;
+        width: 90px;
+        padding-left: 20px;
+        line-height: 20px;
+    }
 
-        .inputBox .item {
-            border-style: none;
-            border-bottom: 1px solid #ddd;
-            width: 400px;
-            margin-left: 50px;
-            padding-left: 20px;
-            line-height: 20px;
-        }
+    .inputBox .item {
+        border-style: none;
+        border-bottom: 1px solid #ddd;
+        width: 400px;
+        margin-left: 50px;
+        padding-left: 20px;
+        line-height: 20px;
+    }
 
-        .todoList {
-            list-style: none;
-            padding: 10px 0;
-            text-align: left;
-        }
+    .todoList {
+        list-style: none;
+        padding: 10px 0;
+        text-align: left;
+    }
 
-        .todoList li {
-            display: flex;
-            height: 50px;
-            line-height: 50px;
-            margin: 0.5rem 0;
-            padding: 0 0.9rem;
-            background: white;
-            border-radius: 5px;
-        }
+    .todoList li {
+        display: flex;
+        height: 50px;
+        line-height: 50px;
+        margin: 0.5rem 0;
+        padding: 0 0.9rem;
+        background: white;
+        border-radius: 5px;
+    }
 
-        .removeBtn {
-            font-size: 20px;
-            cursor: pointer;
-            margin: auto 0 auto auto;
-        }
-        .removeBtn:hover {
-            color: #de4d85;
-        }
-    </style>
+    .removeBtn {
+        font-size: 20px;
+        cursor: pointer;
+        margin: auto 0 auto auto;
+    }
+
+    .removeBtn:hover {
+        color: #de4d85;
+    }
+</style>
 {% endblock %}
 {% block content %}
 
-    <div id='app'>
+<div id='app'>
 
-        <h1>My Todo App !</h1>
-        <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
-        <br>
+    <h1>My Todo App !</h1>
+    <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
+    <br>
 
-        <div>
-            <input class="name" type="text" placeholder="name ..." v-model.trim="name">
-<!--            v-model에 .trim 이라는 수식어를 사용하면 앞뒤 공백을 삭제해서 삽입한다. -->
-            <input class="item" type="text" placeholder="type anything welcomed ..." v-model.trim="todo" @keyup.enter="add_todo()">
-            <button class="btn btn-primary btn-sm" @click="add_todo()">ADD</button>
-        </div>
-
-        <ul class="todoList">
-            <li v-for="(todo, index) in todoList">
-                <span>{ todo.name } :: { todo.todo }</span>
-                <span class="removeBtn" @click="remove_todo(index)">&#x00D7</span>
-            </li>
-        </ul>
-
+    <div>
+        <input class="name" type="text" placeholder="name ..." v-model.trim="name">
+        <!--            v-model에 .trim 이라는 수식어를 사용하면 앞뒤 공백을 삭제해서 삽입한다. -->
+        <input class="item" type="text" placeholder="type anything welcomed ..." v-model.trim="todo"
+               @keyup.enter="add_todo()">
+        <button class="btn btn-primary btn-sm" @click="add_todo()">ADD</button>
     </div>
+
+    <ul class="todoList">
+        <li v-for="(todo, index) in todoList">
+            <span>{ todo.name } :: { todo.todo }</span>
+            <span class="removeBtn" @click="remove_todo(index)">&#x00D7</span>
+        </li>
+    </ul>
+
+</div>
 {% endblock %}
 {% block extra-script %}
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-let vm = new Vue({
-            delimiters: ['{', '}'],
-            el: '#app',
-            data: {
-                name: '',
-                todo: '',
-                todoList: [
-                    {name: '테스트1', todo: '테스트 내용 1'},
-                    {name: '테스트4', todo: '테스트 내용 4'},
-                    {name: '테스트2', todo: '테스트 내용 2'},
-                    {name: '테스트3', todo: '테스트 내용 3'},
-                ],
+    let vm = new Vue({
+        delimiters: ['{', '}'],
+        el: '#app',
+        data: {
+            name: '',
+            todo: '',
+            todoList: [
+                {name: '테스트1', todo: '테스트 내용 1'},
+                {name: '테스트4', todo: '테스트 내용 4'},
+                {name: '테스트2', todo: '테스트 내용 2'},
+                {name: '테스트3', todo: '테스트 내용 3'},
+            ],
+        },
+        created: function () {
+           console.log("created()..")
+            this.fetch_all_todo();
+        },
+        methods: {
+            fetch_all_todo: function () {
+                console.log("fetch_all_todo()...")
+                var vm = this;
+                axios.get('/api/todo/list').then(function (res){
+                    console.log("GET RES", res);
+                    // 콜백 함수내에 정의된 this는 window 객체를 의미하기 때문에 this.todoList는 Undefiend 객체가 되므로
+                    // 로컬 변수에 임시로 this로 저장했다가 사용하면 된다.
+                    // this.todoList = res.data;
+                    vm.todoList = res.data;
+                }).catch(function (err) {
+                    console.log("GET ERR", err);
+                })
             },
-            methods: {
-                add_todo: function () {
-                    console.log("add_todo()...");
-                    if (this.name === '') {
-                        this.name = 'user'
-                    }
-                    if (this.todo === '') {
-                        return;
-                    }
-                    this.todoList.push({name: this.name, todo: this.todo});
-                    this.name = this.todo = '';
-                },
-                remove_todo: function (index) {
-                    console.log(index);
-                    this.todoList.splice(index, 1);
-                },
+            add_todo: function () {
+                console.log("add_todo()...");
+                if (this.name === '') {
+                    this.name = 'user'
+                }
+                if (this.todo === '') {
+                    return;
+                }
+                this.todoList.push({name: this.name, todo: this.todo});
+                this.name = this.todo = '';
             },
-        })
-    </script>
+            remove_todo: function (index) {
+                console.log(index);
+                this.todoList.splice(index, 1);
+            },
+        },
+    })
+</script>
 {% endblock %}
