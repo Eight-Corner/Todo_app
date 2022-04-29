@@ -4,5 +4,5 @@ from . import views
 
 app_name = 'api'
 urlpatterns = [
-    path('/todolist/', views.ApiTodoLV.as_view(), name='list'),
+    path('todolist/', views.ApiTodoLV.as_view(), name='list'),
 ]
