@@ -91,6 +91,9 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script>
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
     let vm = new Vue({
         delimiters: ['{', '}'],
         el: '#app',
@@ -119,18 +122,19 @@
             },
             add_todo: function () {
                 console.log("add_todo()...");
-                if (this.name === '') {
-                    this.name = 'user'
-                }
                 if (this.todo === '') {
                     return;
+                }
+                if (this.name === '') {
+                    this.name = 'user'
                 }
 
                 var vm = this;
                 var postData = {
                     name: this.name, todo: this.todo
                 };
-                axios.post('/api/todo/create/', postData).then(function (res) {
+                // axios.post('/api/todo/create/', postData, {xsrfCookieName: 'csrftoken', xsrfHeaderName: 'X-CSRFToken'}).then(function (res) {
+                axios.post('/api/todo/create/', postData, {xsrfCookieName: 'csrftoken', xsrfHeaderName: 'X-CSRFToken'}).then(function (res) {
                     console.log("post res", res);
                     vm.todoList.push({id: res.data.id, name: res.data.name, todo: res.data.todo});
                 }).catch(function (err) {
@@ -140,9 +144,11 @@
             },
             remove_todo: function (todo, index) {
                 console.log(todo, index);
-
+                if (confirm("정말 삭제하시겠습니까?") === false) {
+                    return;
+                }
                 var vm = this;
-                axios.delete('/api/todo/' + todo.id + '/delete/').then(function (res) {
+                axios.delete('/api/todo/' + todo.id + '/delete/', ).then(function (res) {
                     console.log("Delete Res", res);
                     vm.todoList.splice(index, 1);
                 }).catch(function (err) {

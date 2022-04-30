@@ -31,7 +31,7 @@ class ApiTodoLV(BaseListView):
 
 
 #
-@method_decorator(csrf_exempt, name='dispatch')
+# @method_decorator(csrf_exempt, name='dispatch')
 class ApiTodoDelV(BaseDeleteView):
     model = Todo
 
@@ -41,7 +41,7 @@ class ApiTodoDelV(BaseDeleteView):
         return JsonResponse(data={}, status=204)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
+# @method_decorator(csrf_exempt, name='dispatch')
 class ApiTodoCV(BaseCreateView):
     model = Todo
     fields = '__all__' # 필수
